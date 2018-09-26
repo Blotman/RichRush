@@ -1,6 +1,7 @@
 package com.nguy.richrush;
 
-import com.nguy.richrush.DataUtils.RestaurantDataListener;
+import com.nguy.richrush.core.DataUtils;
+import com.nguy.richrush.core.DataUtils.RestaurantDataListener;
 
 import org.junit.Test;
 

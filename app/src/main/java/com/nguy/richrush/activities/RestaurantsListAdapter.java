@@ -1,26 +1,46 @@
-package com.nguy.richrush;
+package com.nguy.richrush.activities;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.nguy.richrush.R;
+import com.nguy.richrush.core.DataUtils;
+import com.nguy.richrush.core.RestaurantData;
 
 public class RestaurantsListAdapter extends Adapter<RestaurantsListAdapter.ViewHolder> {
-    final Context mContext;
+    private final Context mContext;
+    private final Helper mHelper;
 
-    public RestaurantsListAdapter(Context context) {
+    public interface Helper {
+        void onRestaurantClicked(int index, View imageView);
+    }
+
+    public RestaurantsListAdapter(Context context, Helper helper) {
         mContext = context;
+        mHelper = helper;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ViewHolder(parent);
+        final ViewHolder viewHolder = new ViewHolder(parent);
+        viewHolder.itemView.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mHelper != null) {
+                    mHelper.onRestaurantClicked(viewHolder.getAdapterPosition(), viewHolder.image);
+                }
+            }
+        });
+        return viewHolder;
     }
 
     @Override

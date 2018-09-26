@@ -1,4 +1,4 @@
-package com.nguy.richrush;
+package com.nguy.richrush.core;
 
 import android.util.Log;
 

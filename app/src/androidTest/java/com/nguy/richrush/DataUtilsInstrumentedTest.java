@@ -4,9 +4,14 @@ import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.UiThreadTest;
+import android.view.View;
 import android.widget.FrameLayout;
 
-import com.nguy.richrush.RestaurantsListAdapter.ViewHolder;
+import com.nguy.richrush.activities.RestaurantsListAdapter;
+import com.nguy.richrush.activities.RestaurantsListAdapter.Helper;
+import com.nguy.richrush.activities.RestaurantsListAdapter.ViewHolder;
+import com.nguy.richrush.core.DataUtils;
+import com.nguy.richrush.core.RestaurantData;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -45,7 +50,9 @@ public class DataUtilsInstrumentedTest {
     @UiThreadTest
     public void adapterBinding() throws Exception {
         final Context context = InstrumentationRegistry.getTargetContext();
-        final RestaurantsListAdapter adapter = new RestaurantsListAdapter(context);
+        final TestAdapterHelper helper = new TestAdapterHelper();
+
+        final RestaurantsListAdapter adapter = new RestaurantsListAdapter(context, helper);
         assertEquals(0, adapter.getItemCount());
 
         DataUtils.resetRestaurantData(jsonData);
@@ -57,5 +64,18 @@ public class DataUtilsInstrumentedTest {
 
         adapter.onBindViewHolder(viewHolder, 1);
         assertEquals("b", viewHolder.name.getText());
+
+        assertEquals(0, helper.encounter);
+        viewHolder.itemView.callOnClick();
+        assertEquals(1, helper.encounter);
+    }
+
+    private class TestAdapterHelper implements Helper {
+        public int encounter = 0;
+
+        @Override
+        public void onRestaurantClicked(RestaurantData restaurantData, View imageView) {
+            encounter++;
+        }
     }
 }

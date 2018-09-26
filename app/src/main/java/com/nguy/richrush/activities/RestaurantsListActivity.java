@@ -1,6 +1,10 @@
-package com.nguy.richrush;
+package com.nguy.richrush.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,7 +14,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.nguy.richrush.DataUtils.RestaurantDataListener;
+import com.nguy.richrush.R;
+import com.nguy.richrush.activities.RestaurantsListAdapter.Helper;
+import com.nguy.richrush.core.Constants.Restaurant;
+import com.nguy.richrush.core.DataUtils;
+import com.nguy.richrush.core.DataUtils.RestaurantDataListener;
 
 public class RestaurantsListActivity extends AppCompatActivity {
 
@@ -28,6 +36,20 @@ public class RestaurantsListActivity extends AppCompatActivity {
         }
     };
 
+    final private Helper mAdapterHelper = new Helper() {
+        @Override
+        public void onRestaurantClicked(int index, View imageView) {
+            final Intent intent = new Intent(RestaurantsListActivity.this, RestaurantActivity.class);
+            intent.putExtra(Restaurant.INDEX, index);
+
+                final ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        RestaurantsListActivity.this,
+                        new Pair<>(imageView, "image"));
+
+                ActivityCompat.startActivity(RestaurantsListActivity.this, intent, options.toBundle());
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,7 +58,7 @@ public class RestaurantsListActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         mProgressBar = findViewById(R.id.progress_bar);
-        mAdapter = new RestaurantsListAdapter(this);
+        mAdapter = new RestaurantsListAdapter(this, mAdapterHelper);
 
         final RecyclerView recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

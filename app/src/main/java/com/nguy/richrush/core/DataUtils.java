@@ -1,4 +1,4 @@
-package com.nguy.richrush;
+package com.nguy.richrush.core;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -40,7 +40,7 @@ public class DataUtils {
 
     public static RestaurantData getRestaurantData(int index) {
         synchronized (sRestaurantsList) {
-            return index < sRestaurantsList.size() ? sRestaurantsList.get(index) : null;
+            return index >= 0 && index < sRestaurantsList.size() ? sRestaurantsList.get(index) : null;
         }
     }
 
